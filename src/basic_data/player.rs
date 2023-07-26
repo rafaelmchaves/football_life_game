@@ -1,7 +1,7 @@
 pub struct Player {
     person: Person,
     position: Position,
-    //team
+    team: Team,
     //skills
 }
 
