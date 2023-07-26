@@ -1,4 +1,5 @@
 pub struct Competition {
+    id: str,
     c_type: CompetitionType,
     name: str,
     amount_teams: i8,
@@ -8,9 +9,17 @@ pub struct Competition {
     competitionRegionType: CompetitionRegionType,
     region: str,
     teams: Vec<Team>,
-    //TODO metadata of the competion containing the rules of classified and relegated
+    classified: Vec<ClassifiedMetadata>,
     //TODO list of games
     //TODO standings of the competition
+}
+
+struct ClassifiedMetadata {
+    index_rule: i8, //index of this metadata, the lower the number, the rule is precedent
+    amount_teams: i8,
+    competition_id: str,
+    stage_next_competition: str,
+    is_promoted: Boolean, //if the team was promoted to other competition or only advanced to a next stage in the same competition
 }
 
 enum CompetitionType {
