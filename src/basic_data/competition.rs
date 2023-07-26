@@ -8,6 +8,7 @@ pub struct Competition {
     competitionRegionType: CompetitionRegionType,
     region: str,
     teams: Vec<Team>,
+    //TODO metadata of the competion containing the rules of classified and relegated
     //TODO list of games
     //TODO standings of the competition
 }
