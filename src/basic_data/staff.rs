@@ -1,3 +1,5 @@
+use super::{person::Person, team::Team};
+
 pub struct Staff {
     person: Person,
     function: Function,
@@ -11,5 +13,5 @@ pub enum Function {
     COACH,
     SCOUT,
     CHAIRMAN,
-    MANAGER_ASSISTANT,
+    ASSISTANT,
 }

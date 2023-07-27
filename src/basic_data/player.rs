@@ -1,3 +1,5 @@
+use super::{person::Person, team::Team};
+
 pub struct Player {
     person: Person,
     position: Position,
@@ -16,7 +18,7 @@ pub enum Position {
     RightAttackingMidfield,
     LeftAttackingMidfield,
     Forward,
-    Striker,
+    Stringiker,
     LeftWinger,
     RightWinger,
 }

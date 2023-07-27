@@ -1,8 +1,9 @@
+#[derive(Clone)]
 pub struct Person {
-    id: str,
-    name: str,
-    birthdate: str,
-    nationality: str,
+    id: String,
+    name: String,
+    birthdate: String,
+    nationality: String,
     social_media_followers: i32,
-    languages: Vec<str>,
+    languages: Vec<String>,
 }

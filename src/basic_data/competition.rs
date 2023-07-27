@@ -1,13 +1,17 @@
+use std::collections::{HashMap, HashSet};
+
+use super::{match_game::Match, team::Team};
+
 pub struct Competition {
-    id: str,
+    id: String,
     c_type: CompetitionType,
-    name: str,
+    name: String,
     amount_teams: i8,
     relegated_teams_amount: i8,
-    season: str,
+    season: String,
     rating: i8,
-    competitionRegionType: CompetitionRegionType,
-    region: str,
+    competition_region_type: CompetitionRegionType,
+    region: String,
     teams: Vec<Team>,
     classified: Vec<ClassifiedMetadata>,
     //TODO list of games
@@ -17,9 +21,9 @@ pub struct Competition {
 struct ClassifiedMetadata {
     index_rule: i8, //index of this metadata, the lower the number, the rule is precedent
     amount_teams: i8,
-    competition_id: str,
-    stage_next_competition: str,
-    is_promoted: Boolean, //if the team was promoted to other competition or only advanced to a next stage in the same competition
+    competition_id: String,
+    stage_next_competition: String,
+    is_promoted: bool, //if the team was promoted to other competition or only advanced to a next stage in the same competition
 }
 
 enum CompetitionType {
@@ -31,4 +35,103 @@ enum CompetitionRegionType {
     WORLD,
     CONTINENT,
     COUNTRY,
+}
+
+pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
+    let mut rounds: HashMap<i32, Vec<Match>> = HashMap::new();
+
+    let num_teams = teams.len();
+    let mut played_adversaries_team: HashMap<String, Vec<String>> = HashMap::new();
+
+    let mut round_index: i32 = 1;
+    let teams_aux = teams.clone();
+
+    let mut round_teams_set: HashSet<String> = HashSet::new();
+
+    loop {
+        //if all teams played against everyone
+
+        if has_all_teams_played_agains_every_team(&played_adversaries_team, &teams) {
+            break;
+        }
+
+        let mut games: Vec<Match> = Vec::new();
+        for team in teams.iter() {
+            // for i in 0..num_teams - 1 {
+            let mut i = 0;
+            loop {
+                if has_conditions_to_play_current_round(
+                    &team,
+                    &teams_aux,
+                    i,
+                    &played_adversaries_team,
+                    num_teams,
+                    &round_teams_set,
+                ) {
+                    let game = Match {
+                        team1: team.clone(),
+                        team2: teams_aux[i].clone(),
+                    };
+
+                    println!(
+                        "round {}, home: {} away: {}",
+                        round_index, game.team1, game.team2
+                    );
+                    played_adversaries_team
+                        .entry(game.team1.clone())
+                        .or_insert_with(|| vec![game.team2.clone()])
+                        .push(game.team2.clone());
+
+                    played_adversaries_team
+                        .entry(game.team2.clone())
+                        .or_insert_with(|| vec![game.team1.clone()])
+                        .push(game.team1.clone());
+
+                    round_teams_set.insert(team.clone());
+                    round_teams_set.insert(teams_aux[i].clone());
+
+                    break games.push(game);
+                } else if i == num_teams - 1 {
+                    break;
+                } else {
+                    i += 1;
+                }
+            }
+        }
+
+        rounds.insert(round_index, games);
+        round_index += 1;
+        round_teams_set = HashSet::new();
+    }
+
+    rounds
+}
+
+fn has_all_teams_played_agains_every_team(
+    played_adversaries_team: &HashMap<String, Vec<String>>,
+    teams: &Vec<String>,
+) -> bool {
+    played_adversaries_team.len() == teams.len()
+        && played_adversaries_team
+            .iter()
+            .all(|(_team, vec)| vec.len() == teams.len())
+}
+
+fn has_conditions_to_play_current_round(
+    team: &String,
+    teams_aux: &Vec<String>,
+    i: usize,
+    played_adversaries_team: &HashMap<String, Vec<String>>,
+    teams_amount: usize,
+    round_teams_set: &HashSet<String>,
+) -> bool {
+    i < teams_amount - 1
+        && (!round_teams_set.contains(team) && !round_teams_set.contains(&teams_aux[i]))
+        && !team.eq(&*teams_aux[i])
+        && played_adversaries_team
+            .get(&*team)
+            .map_or(true, |played_teams| !played_teams.contains(&teams_aux[i]))
+        && played_adversaries_team
+            .get(&*teams_aux[i])
+            .map_or(true, |played_teams| !played_teams.contains(team)) //verify if a team already played against the next team in the championship
 }

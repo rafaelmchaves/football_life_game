@@ -1,17 +1,19 @@
+use super::staff::Staff;
+
 pub struct Team {
-    pub id: str,
-    pub name: str,
-    pub shortname: str,
+    pub id: String,
+    pub name: String,
+    pub shortname: String,
     pub color_1: Colors,
     pub color_2: Colors,
     pub stadium: Stadium,
     pub president: Staff,
-    pub nation: str,
+    pub nation: String,
 }
 
 pub struct Stadium {
-    pub id: str,
-    pub name: str,
+    pub id: String,
+    pub name: String,
     pub capacity: i8,
     pub seat_capacity: i8,
 }
