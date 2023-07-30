@@ -37,6 +37,8 @@ enum CompetitionRegionType {
     COUNTRY,
 }
 
+//TODO create a method generate_competition that it checks Competition type and metadata to know how kind of game rounds will be generated.
+
 pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
     let mut rounds: HashMap<i32, Vec<Match>> = HashMap::new();
 
@@ -73,10 +75,6 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
                         team2: teams_aux[i].clone(),
                     };
 
-                    println!(
-                        "round {}, home: {} away: {}",
-                        round_index, game.team1, game.team2
-                    );
                     played_adversaries_team
                         .entry(game.team1.clone())
                         .or_insert_with(|| vec![game.team2.clone()])
