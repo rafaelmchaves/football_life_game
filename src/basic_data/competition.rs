@@ -15,7 +15,7 @@ pub struct Competition {
     teams: Vec<Team>,
     classified: Vec<ClassifiedMetadata>,
     game_rounds: HashMap<i32, Vec<Match>>,
-    //TODO standings of the competition
+    standings: Vec<Standing>,
 }
 
 struct ClassifiedMetadata {
