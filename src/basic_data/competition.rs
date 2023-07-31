@@ -53,13 +53,12 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
     loop {
         //if all teams played against everyone
 
-        if has_all_teams_played_agains_every_team(&played_adversaries_team, &teams) {
+        if has_all_teams_played_against_every_team(&played_adversaries_team, &teams) {
             break;
         }
 
         let mut games: Vec<Match> = Vec::new();
         for team in teams.iter() {
-            // for i in 0..num_teams - 1 {
             let mut i = 0;
             loop {
                 if has_conditions_to_play_current_round(
@@ -105,7 +104,7 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
     rounds
 }
 
-fn has_all_teams_played_agains_every_team(
+fn has_all_teams_played_against_every_team(
     played_adversaries_team: &HashMap<String, Vec<String>>,
     teams: &Vec<String>,
 ) -> bool {
