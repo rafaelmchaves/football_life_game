@@ -14,7 +14,7 @@ pub struct Competition {
     region: String,
     teams: Vec<Team>,
     classified: Vec<ClassifiedMetadata>,
-    //TODO list of games
+    game_rounds: HashMap<i32, Vec<Match>>,
     //TODO standings of the competition
 }
 
@@ -37,6 +37,20 @@ enum CompetitionRegionType {
     COUNTRY,
 }
 
+struct Standing {
+    position: i8,
+    group: String,
+    team: Team,
+    pts: i16,
+    goals_for: i16,
+    goals_against: i16,
+    goal_difference: i16,
+    played: i8,
+    won: i8,
+    drawn: i8,
+    lost: i8,
+}
+
 //TODO create a method generate_competition that it checks Competition type and metadata to know how kind of game rounds will be generated.
 
 pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
@@ -51,8 +65,6 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
     let mut round_teams_set: HashSet<String> = HashSet::new();
 
     loop {
-        //if all teams played against everyone
-
         if has_all_teams_played_against_every_team(&played_adversaries_team, &teams) {
             break;
         }
