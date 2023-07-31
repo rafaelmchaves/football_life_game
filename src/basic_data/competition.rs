@@ -57,7 +57,7 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
     let mut rounds: HashMap<i32, Vec<Match>> = HashMap::new();
 
     let num_teams = teams.len();
-    let mut played_adversaries_team: HashMap<String, Vec<String>> = HashMap::new();
+    let mut played_against_team: HashMap<String, Vec<String>> = HashMap::new();
 
     let mut round_index: i32 = 1;
     let teams_aux = teams.clone();
@@ -65,7 +65,7 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
     let mut round_teams_set: HashSet<String> = HashSet::new();
 
     loop {
-        if has_all_teams_played_against_every_team(&played_adversaries_team, &teams) {
+        if has_all_teams_played_against_every_team(&played_against_team, &teams) {
             break;
         }
 
@@ -77,7 +77,7 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
                     &team,
                     &teams_aux,
                     i,
-                    &played_adversaries_team,
+                    &played_against_team,
                     num_teams,
                     &round_teams_set,
                 ) {
@@ -86,12 +86,12 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
                         team2: teams_aux[i].clone(),
                     };
 
-                    played_adversaries_team
+                    played_against_team
                         .entry(game.team1.clone())
                         .or_insert_with(|| vec![game.team2.clone()])
                         .push(game.team2.clone());
 
-                    played_adversaries_team
+                    played_against_team
                         .entry(game.team2.clone())
                         .or_insert_with(|| vec![game.team1.clone()])
                         .push(game.team1.clone());
@@ -130,17 +130,21 @@ fn has_conditions_to_play_current_round(
     team: &String,
     teams_aux: &Vec<String>,
     i: usize,
-    played_adversaries_team: &HashMap<String, Vec<String>>,
+    played_against_team: &HashMap<String, Vec<String>>,
     teams_amount: usize,
     round_teams_set: &HashSet<String>,
 ) -> bool {
     i < teams_amount - 1
         && (!round_teams_set.contains(team) && !round_teams_set.contains(&teams_aux[i]))
         && !team.eq(&*teams_aux[i])
-        && played_adversaries_team
+        && played_against_team
             .get(&*team)
-            .map_or(true, |played_teams| !played_teams.contains(&teams_aux[i]))
-        && played_adversaries_team
+            .map_or(true, |played_against_teams| {
+                !played_against_teams.contains(&teams_aux[i])
+            })
+        && played_against_team
             .get(&*teams_aux[i])
-            .map_or(true, |played_teams| !played_teams.contains(team)) //verify if a team already played against the next team in the championship
+            .map_or(true, |played_against_teams| {
+                !played_against_teams.contains(team)
+            }) //verify if a team already played against the next team in the championship
 }
