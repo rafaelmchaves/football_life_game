@@ -16,6 +16,7 @@ pub struct Stadium {
     pub name: String,
     pub capacity: i8,
     pub seat_capacity: i8,
+    pub city: String,
 }
 
 pub enum Colors {

@@ -44,12 +44,4 @@ fn main() {
     for (round_num, round_matches) in matches_list.iter().enumerate() {
         println!("Round {}: {:?}", round_num + 1, round_matches);
     }
-
-    // let matches_list = generate_competion_games(teams_list);
-    // for (round_num, round_matches) in matches_list.iter().enumerate() {
-    //     println!("Round {}: ", round_num + 1);
-    //     for game in round_matches {
-    //         println!("{} vs {}", game.home, game.away);
-    //     }
-    // }
 }
