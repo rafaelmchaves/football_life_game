@@ -1,6 +1,6 @@
 use super::team::{Stadium, Team};
 
-pub struct MatchCompleted {
+pub struct MatchInfo {
     id: String,
     home: Team,
     away: Team,
@@ -10,6 +10,6 @@ pub struct MatchCompleted {
 }
 #[derive(Debug)]
 pub struct Match {
-    pub team1: String,
-    pub team2: String,
+    pub home: String,
+    pub away: String,
 }

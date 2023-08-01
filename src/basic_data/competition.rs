@@ -82,19 +82,19 @@ pub fn generate_games(teams: Vec<String>) -> HashMap<i32, Vec<Match>> {
                     &round_teams_set,
                 ) {
                     let game = Match {
-                        team1: team.clone(),
-                        team2: teams_aux[i].clone(),
+                        home: team.clone(),
+                        away: teams_aux[i].clone(),
                     };
 
                     played_against_team
-                        .entry(game.team1.clone())
-                        .or_insert_with(|| vec![game.team2.clone()])
-                        .push(game.team2.clone());
+                        .entry(game.home.clone())
+                        .or_insert_with(|| vec![game.away.clone()])
+                        .push(game.away.clone());
 
                     played_against_team
-                        .entry(game.team2.clone())
-                        .or_insert_with(|| vec![game.team1.clone()])
-                        .push(game.team1.clone());
+                        .entry(game.away.clone())
+                        .or_insert_with(|| vec![game.home.clone()])
+                        .push(game.home.clone());
 
                     round_teams_set.insert(team.clone());
                     round_teams_set.insert(teams_aux[i].clone());
